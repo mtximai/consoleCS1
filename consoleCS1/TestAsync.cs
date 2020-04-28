@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Testes com Async / Await - 04/2020
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +29,13 @@ namespace consoleCS1
       // Executa uma lista de tarefa e monitora o término individualmente
       //executarIndividual();
 
+      // Já inicia a execução...
       var x = myFuncAsync();
 
       Console.WriteLine("vai aguardar...");
-      var y = x.Result;
+      var y = x.Result; // trava a thread atual até concluir a task
 
       Console.WriteLine($"terminou: {y}");
-
 
     }
 

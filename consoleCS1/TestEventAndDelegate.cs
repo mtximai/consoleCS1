@@ -1,4 +1,4 @@
-﻿// 28/04/20
+﻿// Teste com Event e Delegate - 28/04/20
 // fonte: https://www.youtube.com/watch?v=jQgwEsJISy0&list=PLTjRvDozrdlz3_FPXwb6lX_HoGXa09Yef&index=11
 
 using System;
@@ -14,8 +14,8 @@ namespace consoleCS1
 
       var videoEncoder = new VideoEncoder();
 
-      var p1 = new Pessoa() { nome = "Huguinho" };
-      var p2 = new Pessoa() { nome = "Pato Donald" };
+      var p1 = new Pessoa() { nome = "Huguinho" };      // subscriber
+      var p2 = new Pessoa() { nome = "Pato Donald" };   // subscriber
 
       videoEncoder.VideoEncoded += p1.OnVideoEncoded;
       videoEncoder.VideoEncoded += p2.OnVideoEncoded;
@@ -30,18 +30,24 @@ namespace consoleCS1
   {
     // 1- Define a delegate
     // 2- Define an event based on that delegate
-    // 3- Raise the event
 
-    public delegate void VideoEncodedEventHandler(object source, EventArgs args);
-
-    // Vai receber os ponteiros dos Subscribers
+    // Forma antiga
+    /*
+    public delegate void VideoEncodedEventHandler(object source, VideoEventArgs args);
     public event VideoEncodedEventHandler VideoEncoded;
+    */
+
+
+    // Nova forma
+    public event EventHandler<VideoEventArgs> VideoEncoded;
+
 
     public void Encode()
     {
       Console.WriteLine("Encoding video...");
       Thread.Sleep(3000);
-
+    
+      // 3- Raise the event
       OnVideoEncoded();
     }
 
@@ -49,9 +55,15 @@ namespace consoleCS1
     {
       if (VideoEncoded != null)
       {
-        VideoEncoded(this, EventArgs.Empty);
+        VideoEncoded(this, new VideoEventArgs() { message = "OnVideoEncoded(): processamento concluído."});
       }
     }
+  }
+
+
+  public class VideoEventArgs : EventArgs
+  {
+    public string message { get; set; }
   }
 
 
@@ -59,11 +71,10 @@ namespace consoleCS1
 
     public string nome;
 
-    public void OnVideoEncoded(object source, EventArgs args)
+    public void OnVideoEncoded(object source, VideoEventArgs args)
     {
-      Console.WriteLine($"Pessoa: {nome} - ok, fui notificado.");
+      Console.WriteLine($"Pessoa: {nome} - ok, fui notificado com a mensagem: {args.message}");
     }
-
 
   }
 

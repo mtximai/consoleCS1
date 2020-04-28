@@ -11,9 +11,9 @@ namespace consoleCS1
     static void Main(string[] args)
     {
 
-      TestAsync.test();
+      //TestAsync.test();
 
-      //TestEventAndDelegate.test();
+      TestEventAndDelegate.test();
 
 
     }
